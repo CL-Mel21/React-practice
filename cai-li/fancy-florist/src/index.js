@@ -1,21 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Hello from './App.js';
+import './index.css';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-var person = {
-  personName: "Nick",
-  personAge: 24,
-  favorites: [
-    "capybaras",
-    "Tigers",
-    "Dinosaurs count!"
-  ]
-}
 root.render(
   <React.StrictMode>
-    <Hello name={person.personName} age={person.personAge} animals={person.favorites} />
+    <App />
   </React.StrictMode>
 );
 
