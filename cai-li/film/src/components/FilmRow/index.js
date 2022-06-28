@@ -3,7 +3,7 @@ import "./index.css";
 
 const FilmRow = ({ film, handleSelectDetail, handleSelectFave }) => {
   const [isSelectFave, setIsSelectFave] = useState('add_to_queue');
-  
+  const releaseDate = new Date(film.release_date);
   return (
     <>
       <button className="FilmRow" onClick={() => handleSelectDetail(film)}>
@@ -13,7 +13,7 @@ const FilmRow = ({ film, handleSelectDetail, handleSelectFave }) => {
         />
         <div className="film-summary">
           <h3>{film.title}</h3>
-          <p>{film.release_date}</p>
+          <p>{releaseDate.getFullYear()}</p>
         </div>
         <button className="fave" onClick={() => handleSelectFave(film, isSelectFave, setIsSelectFave)}>
           <span className="material-icons">{isSelectFave}</span>
