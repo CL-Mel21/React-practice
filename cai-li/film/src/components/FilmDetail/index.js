@@ -17,6 +17,7 @@ function FilmDetail({ film }) {
       </figure>
 
       <div className="film-meta">
+        <strong>{film.tagline}</strong>
         <p className="film-detail-overview">
           <img
             src={`https://image.tmdb.org/t/p/w780${film.poster_path}`}

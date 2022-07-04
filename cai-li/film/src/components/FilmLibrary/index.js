@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "./FilmLibrary.css";
-import { TMDB } from "./TMDB";
+import { TMDB, TMDB_API_KEY } from "./TMDB";
 import FilmDetail from "../FilmDetail";
 import FilmRow from "../FilmRow";
-
 
 const FilmLibrary = () => {
   const [selectedFilm, setSelectedFilm] = useState(null);
@@ -12,7 +11,22 @@ const FilmLibrary = () => {
   const [listFilmsFlag, setListFilmsFlag] = useState(1);
 
   const handleSelectDetail = (film) => {
-    setSelectedFilm(film);
+    // setSelectedFilm(film);
+    fetch(`https://api.themoviedb.org/3/movie/${film.id}?api_key=${TMDB_API_KEY}&language=en-US`)
+    .then((response) => {
+    return response.json()})
+    .then((jsonData) => {
+      setSelectedFilm({
+        "id": jsonData.id,
+        "title": jsonData.title,
+        "poster_path": jsonData.poster_path,
+        "backdrop_path": jsonData.backdrop_path,
+        "overview": jsonData.overview,
+        "release_date": jsonData.release_date,
+        "tagline": jsonData.tagline
+      });
+    })
+    .catch((error) => console.log(error.message))
   };
 
   const handleSelectFave = (film, isSelectFave, setIsSelectFave) => {
