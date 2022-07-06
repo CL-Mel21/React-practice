@@ -1,7 +1,7 @@
 import "./index.css";
 
 function FilmDetail({ film }) {
-  console.log(film);
+  // console.log(film);
   if (film === null) {
     return FilmDetailEmpty();
   }
