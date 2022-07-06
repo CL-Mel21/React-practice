@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./FilmLibrary.css";
-import { TMDB, TMDB_API_KEY } from "./TMDB";
+import { TMDB_API_KEY } from "./TMDB";
 import FilmDetail from "../FilmDetail";
 import FilmRow from "../FilmRow";
 
