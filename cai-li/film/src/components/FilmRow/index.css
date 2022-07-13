@@ -49,3 +49,8 @@
 .FilmRow .film-summary > p {
   margin-top: 0;
 }
+
+.film-detail-link {
+  text-decoration: none;
+  color: #000;
+}

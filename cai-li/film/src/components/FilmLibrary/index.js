@@ -1,38 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./FilmLibrary.css";
 import { TMDB_API_KEY } from "./TMDB";
-import FilmDetail from "../FilmDetail";
 import FilmRow from "../FilmRow";
+import { Outlet } from "react-router-dom";
 
 const FilmLibrary = () => {
-  const [selectedFilm, setSelectedFilm] = useState(null);
   const [faveFilms, setFaveFilms] = useState([]);
   const [listFilms, setListFilms] = useState([]);
   const [showList, setShowList] = useState([]);
   const [listFilmsFlag, setListFilmsFlag] = useState(1);
-  const [loadPage, setLoadPage] = useState(2);
+  const [loadPage, setLoadPage] = useState(1);
   const [selectYear, setSelectYear] = useState(2022);
-
-  const handleSelectDetail = (film) => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${film.id}?api_key=${TMDB_API_KEY}&language=en-US`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((jsonData) => {
-        setSelectedFilm({
-          id: jsonData.id,
-          title: jsonData.title,
-          poster_path: jsonData.poster_path,
-          backdrop_path: jsonData.backdrop_path,
-          overview: jsonData.overview,
-          release_date: jsonData.release_date,
-          tagline: jsonData.tagline,
-        });
-      })
-      .catch((error) => console.log(error.message));
-  };
 
   const handleSelectFave = (film, isSelectFave, setIsSelectFave) => {
     if (isSelectFave === "add_to_queue") {
@@ -66,7 +44,6 @@ const FilmLibrary = () => {
         return response.json();
       })
       .then((jsonData) => {
-        // console.log(jsonData.results);
         setListFilms(listFilms.concat(jsonData.results));
         setShowList(listFilms.concat(jsonData.results));
       })
@@ -81,7 +58,6 @@ const FilmLibrary = () => {
         return response.json();
       })
       .then((jsonData) => {
-        // console.log(jsonData.results);
         setListFilms(jsonData.results);
         if (listFilmsFlag === 1) {
           setShowList(jsonData.results);
@@ -100,7 +76,6 @@ const FilmLibrary = () => {
         return response.json();
       })
       .then((jsonData) => {
-        // console.log(jsonData.results);
         setListFilms(jsonData.results);
         setShowList(jsonData.results);
       })
@@ -116,7 +91,7 @@ const FilmLibrary = () => {
             <input
               className="select-year"
               type="number"
-              min="1900"
+              min="1950"
               max="2022"
               step="1"
               value={selectYear}
@@ -154,7 +129,7 @@ const FilmLibrary = () => {
               key={film.id}
               film={film}
               faveFilms={faveFilms}
-              handleSelectDetail={handleSelectDetail}
+              // handleSelectDetail={handleSelectDetail}
               handleSelectFave={handleSelectFave}
             />
           );
@@ -168,7 +143,7 @@ const FilmLibrary = () => {
 
       <div className="film-details">
         <h1 className="section-title">DETAILS</h1>
-        <FilmDetail film={selectedFilm} />
+        <Outlet />
       </div>
     </div>
   );
