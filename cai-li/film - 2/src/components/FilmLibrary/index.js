@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from "react";
 import "./FilmLibrary.css";
 import { TMDB_API_KEY } from "./TMDB";
+import FilmDetail from "../FilmDetail";
 import FilmRow from "../FilmRow";
-import { Outlet } from "react-router-dom";
 
 const FilmLibrary = () => {
+  const [selectedFilm, setSelectedFilm] = useState(null);
   const [faveFilms, setFaveFilms] = useState([]);
   const [listFilms, setListFilms] = useState([]);
   const [showList, setShowList] = useState([]);
   const [listFilmsFlag, setListFilmsFlag] = useState(1);
-  const [loadPage, setLoadPage] = useState(1);
+  const [loadPage, setLoadPage] = useState(2);
   const [selectYear, setSelectYear] = useState(2022);
-  const [fetchURL, setFetchURL] = useState(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&primary_release_year=2022&sort_by=popularity.desc`
-  );
-  // const [dom, setDom] = useState();
+
+  const handleSelectDetail = (film) => {
+    fetch(
+      `https://api.themoviedb.org/3/movie/${film.id}?api_key=${TMDB_API_KEY}&language=en-US`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((jsonData) => {
+        setSelectedFilm({
+          id: jsonData.id,
+          title: jsonData.title,
+          poster_path: jsonData.poster_path,
+          backdrop_path: jsonData.backdrop_path,
+          overview: jsonData.overview,
+          release_date: jsonData.release_date,
+          tagline: jsonData.tagline,
+        });
+      })
+      .catch((error) => console.log(error.message));
+  };
 
   const handleSelectFave = (film, isSelectFave, setIsSelectFave) => {
     if (isSelectFave === "add_to_queue") {
@@ -39,61 +57,66 @@ const FilmLibrary = () => {
     }
   };
 
-  const fetchFilmList = () => {
-    fetch(fetchURL)
+  const handleLoadMoreFilms = () => {
+    setLoadPage(loadPage + 1);
+    fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&primary_release_year=${selectYear}&sort_by=popularity.desc&page=${loadPage}`
+    )
       .then((response) => {
         return response.json();
       })
       .then((jsonData) => {
+        // console.log(jsonData.results);
         setListFilms(listFilms.concat(jsonData.results));
-        if (listFilmsFlag === 1) {
-          setShowList(listFilms.concat(jsonData.results));
-        }
+        setShowList(listFilms.concat(jsonData.results));
       })
       .catch((error) => console.log(error.message));
   };
 
-  const handleLoadMoreFilms = () => {
-    setLoadPage(loadPage + 1);
-    // const contentScrollTop = dom.scrollTop;
-    // const clientHeight = dom.clientHeight;
-    // const scrollHeight = dom.scrollHeight;
-    // console.log(contentScrollTop + clientHeight, scrollHeight);
-    // if (contentScrollTop + clientHeight >= scrollHeight) {
-    //   setLoadPage(loadPage + 1);
-    // }
-  };
-
   const handleSelectYear = (e) => {
-    setListFilms([]);
+    fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&primary_release_year=${e.target.value}&sort_by=popularity.desc`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((jsonData) => {
+        // console.log(jsonData.results);
+        setListFilms(jsonData.results);
+        if (listFilmsFlag === 1) {
+          setShowList(jsonData.results);
+        }
+      })
+      .catch((error) => console.log(error.message));
     setSelectYear(e.target.value);
-    setLoadPage(1);
+    setLoadPage(2);
   };
 
-  useEffect(
-    () =>
-      setFetchURL(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&primary_release_year=${selectYear}&sort_by=popularity.desc&page=${loadPage}`
-      ),
-    [selectYear, loadPage]
-  );
-
-  useEffect(fetchFilmList, [fetchURL]);
+  useEffect(() => {
+    fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&primary_release_year=2022&sort_by=popularity.desc`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((jsonData) => {
+        // console.log(jsonData.results);
+        setListFilms(jsonData.results);
+        setShowList(jsonData.results);
+      })
+      .catch((error) => console.log(error.message));
+  }, []);
 
   return (
     <div className="FilmLibrary">
       <div className="film-list">
-        {/* <div className="film-list" ref={(dom) => {
-                    setDom(dom);
-                }}
-        onScrollCapture={handleLoadMoreFilms}> */}
         <h1 className="section-title">
           FILMS
           <span>
             <input
               className="select-year"
               type="number"
-              min="1950"
+              min="1900"
               max="2022"
               step="1"
               value={selectYear}
@@ -131,6 +154,7 @@ const FilmLibrary = () => {
               key={film.id}
               film={film}
               faveFilms={faveFilms}
+              handleSelectDetail={handleSelectDetail}
               handleSelectFave={handleSelectFave}
             />
           );
@@ -144,7 +168,7 @@ const FilmLibrary = () => {
 
       <div className="film-details">
         <h1 className="section-title">DETAILS</h1>
-        <Outlet />
+        <FilmDetail film={selectedFilm} />
       </div>
     </div>
   );
