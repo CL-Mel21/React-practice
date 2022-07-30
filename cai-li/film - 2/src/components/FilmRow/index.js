@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import "./index.css";
-import { Link } from "react-router-dom";
 
-const FilmRow = ({ film, faveFilms, handleSelectFave }) => {
+const FilmRow = ({ film, faveFilms, handleSelectDetail, handleSelectFave }) => {
   const isFave = faveFilms.filter((item) => {
     return item.id === film.id;
   });
@@ -14,8 +13,7 @@ const FilmRow = ({ film, faveFilms, handleSelectFave }) => {
   const releaseDate = new Date(film.release_date);
   return (
     <>
-    <Link to={`/films/${film.id}`} className="film-detail-link">
-      <div className="FilmRow">
+      <div className="FilmRow" onClick={() => handleSelectDetail(film)}>
         <img
           src={`https://image.tmdb.org/t/p/w780${film.poster_path}`}
           alt="{film.title} film poster"
@@ -30,9 +28,7 @@ const FilmRow = ({ film, faveFilms, handleSelectFave }) => {
         >
           <span className="material-icons">{isSelectFave}</span>
         </button>
-        
       </div>
-      </Link>
     </>
   );
 };

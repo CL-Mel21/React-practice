@@ -1,0 +1,42 @@
+.homepage {
+    height: 100%;
+    width: 100%;
+    background-image: url('https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1548&q=80');
+}
+
+h1 {
+    width: 300px;
+    margin: 0 10%;
+    padding: 50px 0 0;
+    text-align: center;
+}
+
+.library-entrance {
+    color: black;
+    font-size: 3rem;
+    font-weight: bolder;
+    background: #e26c6c;
+    background: -webkit-linear-gradient(
+      to right,
+      #e26c6c 0%,
+      #adb7bb 19%,
+      #5ca3ff 50%,
+      #adb7bb 86%
+    );
+    background: -moz-linear-gradient(
+      to right,
+      #e26c6c 0%,
+      #adb7bb 19%,
+      #5ca3ff 50%,
+      #adb7bb 86%
+    );
+    background: linear-gradient(
+      to right,
+      #e26c6c 0%,
+      #adb7bb 19%,
+      #5ca3ff 50%,
+      #adb7bb 86%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
